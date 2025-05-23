@@ -1,0 +1,96 @@
+--// Lokale gültige Keys
+local validKeys = {
+    ["X2a9Kf8L"] = true, ["mZ7q1P5E"] = true, ["vY3Wn0bR"] = true, ["Lk8Me92N"] = true, ["Qw7Rt3Yd"] = true,
+    ["Bc5Xz8Vo"] = true, ["N1pWc6Lk"] = true, ["Jm4Tr9Qa"] = true, ["Yd6Xo2Ns"] = true, ["Kz3Vp7Tf"] = true,
+    ["Wq1Lb6Mo"] = true, ["Tn9Ay3Xc"] = true, ["Hs7Nk0Wv"] = true, ["Fz8Rd1Pl"] = true, ["Ex3Ym9Ot"] = true,
+    ["Vc6Lp2Qa"] = true, ["Zo7Wn8Ky"] = true, ["Lm1Qz4Ve"] = true, ["Rb2Tx9Oc"] = true, ["Ga8Yp3Ln"] = true,
+    ["Jy6Vr0Qc"] = true, ["Kp3Xo5Mw"] = true, ["Nb9Lt2Ye"] = true, ["Qc7Wm8Zr"] = true, ["Ys2Tk1Po"] = true,
+    ["Lm9Xq3Nd"] = true, ["Wz5Pa7Ro"] = true, ["Xc0Nt6Vy"] = true, ["Av1Ly9Km"] = true, ["Rn3Wp8Qd"] = true,
+    ["Bq6Zo2Xn"] = true, ["Yk8Mt3Vc"] = true, ["Jz5Lp0Wq"] = true, ["Td1Xn6Oy"] = true, ["Vc9Wq3Ml"] = true,
+    ["Km2Np7Xd"] = true, ["Po6Ry1Wz"] = true, ["Xs3Vk8La"] = true, ["Zn7Qm5Yc"] = true, ["Lw8Tr0Po"] = true,
+    ["Rf3Xy9Nv"] = true, ["Om6Lq1Kb"] = true, ["Vy2Pt8Wo"] = true, ["Qa5Xr3Nl"] = true, ["Wt0Yn6Mp"] = true,
+    ["Kd7Vo2Xc"] = true, ["Bm3Wp9Yl"] = true, ["Yz8Qt0Nv"] = true, ["Lk1Xp6Wr"] = true, ["Nt9Ym3Qb"] = true
+}
+
+--// UI erstellen
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "KeySystem"
+
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.Size = UDim2.new(0, 400, 0, 250)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BorderSizePixel = 0
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.ClipsDescendants = true
+mainFrame.BackgroundTransparency = 1
+mainFrame.Visible = false
+
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 20)
+
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 50)
+title.BackgroundTransparency = 1
+title.Text = "🔑 RAYZ HUB Key System"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 22
+
+local textbox = Instance.new("TextBox", mainFrame)
+textbox.Size = UDim2.new(0.8, 0, 0, 40)
+textbox.Position = UDim2.new(0.1, 0, 0.4, 0)
+textbox.PlaceholderText = "Gib deinen Key ein..."
+textbox.Text = ""
+textbox.TextSize = 18
+textbox.Font = Enum.Font.Gotham
+textbox.TextColor3 = Color3.fromRGB(0, 0, 0)
+textbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textbox.ClearTextOnFocus = false
+Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 10)
+
+local button = Instance.new("TextButton", mainFrame)
+button.Size = UDim2.new(0.5, 0, 0, 40)
+button.Position = UDim2.new(0.25, 0, 0.7, 0)
+button.Text = "✅ CheckKey"
+button.Font = Enum.Font.GothamBold
+button.TextSize = 18
+button.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
+
+--// Ein-/Ausblenden mit Animation
+local function openUI()
+    mainFrame.Visible = true
+    TweenService:Create(mainFrame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
+end
+
+local function closeUI(callback)
+    local tween = TweenService:Create(mainFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1})
+    tween:Play()
+    tween.Completed:Connect(function()
+        mainFrame.Visible = false
+        if callback then callback() end
+    end)
+end
+
+--// Keyprüfung und Scriptausführung
+button.MouseButton1Click:Connect(function()
+    local key = textbox.Text
+    if validKeys[key] then
+        closeUI(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/x8Jc0JmP"))()
+        end)
+    else
+        textbox.Text = ""
+        textbox.PlaceholderText = "❌ Ungültiger Key!"
+        textbox.PlaceholderColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
+
+-- UI öffnen
+wait(1)
+openUI()
