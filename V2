@@ -1,4 +1,3 @@
---// Lokale gültige Keys
 local validKeys = {
     ["X2a9Kf8L"] = true, ["mZ7q1P5E"] = true, ["vY3Wn0bR"] = true, ["Lk8Me92N"] = true, ["Qw7Rt3Yd"] = true,
     ["Bc5Xz8Vo"] = true, ["N1pWc6Lk"] = true, ["Jm4Tr9Qa"] = true, ["Yd6Xo2Ns"] = true, ["Kz3Vp7Tf"] = true,
@@ -12,25 +11,27 @@ local validKeys = {
     ["Kd7Vo2Xc"] = true, ["Bm3Wp9Yl"] = true, ["Yz8Qt0Nv"] = true, ["Lk1Xp6Wr"] = true, ["Nt9Ym3Qb"] = true
 }
 
---// UI erstellen
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
+
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "KeySystem"
+gui.ResetOnSpawn = false
 
 local mainFrame = Instance.new("Frame", gui)
-mainFrame.Size = UDim2.new(0, 400, 0, 250)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+mainFrame.Size = UDim2.new(0, 400, 0, 270)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -135)
 mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.BorderSizePixel = 0
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.ClipsDescendants = true
 mainFrame.BackgroundTransparency = 1
 mainFrame.Visible = false
+mainFrame.Active = true
+mainFrame.Draggable = true
 
-local corner = Instance.new("UICorner", mainFrame)
-corner.CornerRadius = UDim.new(0, 20)
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 20)
 
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0, 50)
@@ -42,7 +43,7 @@ title.TextSize = 22
 
 local textbox = Instance.new("TextBox", mainFrame)
 textbox.Size = UDim2.new(0.8, 0, 0, 40)
-textbox.Position = UDim2.new(0.1, 0, 0.4, 0)
+textbox.Position = UDim2.new(0.1, 0, 0.3, 0)
 textbox.PlaceholderText = "Gib deinen Key ein..."
 textbox.Text = ""
 textbox.TextSize = 18
@@ -52,17 +53,27 @@ textbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 textbox.ClearTextOnFocus = false
 Instance.new("UICorner", textbox).CornerRadius = UDim.new(0, 10)
 
-local button = Instance.new("TextButton", mainFrame)
-button.Size = UDim2.new(0.5, 0, 0, 40)
-button.Position = UDim2.new(0.25, 0, 0.7, 0)
-button.Text = "✅ CheckKey"
-button.Font = Enum.Font.GothamBold
-button.TextSize = 18
-button.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
+local checkButton = Instance.new("TextButton", mainFrame)
+checkButton.Size = UDim2.new(0.5, 0, 0, 40)
+checkButton.Position = UDim2.new(0.25, 0, 0.55, 0)
+checkButton.Text = "✅ CheckKey"
+checkButton.Font = Enum.Font.GothamBold
+checkButton.TextSize = 18
+checkButton.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
+checkButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", checkButton).CornerRadius = UDim.new(0, 10)
 
---// Ein-/Ausblenden mit Animation
+local discordButton = Instance.new("TextButton", mainFrame)
+discordButton.Size = UDim2.new(0.5, 0, 0, 35)
+discordButton.Position = UDim2.new(0.25, 0, 0.78, 0)
+discordButton.Text = "📋 DISCORD"
+discordButton.Font = Enum.Font.GothamBold
+discordButton.TextSize = 18
+discordButton.BackgroundColor3 = Color3.fromRGB(114, 137, 218)
+discordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", discordButton).CornerRadius = UDim.new(0, 10)
+
+-- Tween open/close
 local function openUI()
     mainFrame.Visible = true
     TweenService:Create(mainFrame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
@@ -77,8 +88,8 @@ local function closeUI(callback)
     end)
 end
 
---// Keyprüfung und Scriptausführung
-button.MouseButton1Click:Connect(function()
+-- Button-Logik
+checkButton.MouseButton1Click:Connect(function()
     local key = textbox.Text
     if validKeys[key] then
         closeUI(function()
@@ -91,6 +102,13 @@ button.MouseButton1Click:Connect(function()
     end
 end)
 
--- UI öffnen
+discordButton.MouseButton1Click:Connect(function()
+    setclipboard("https://discord.gg/J3bHv3kbnP")
+    discordButton.Text = "✅ Link kopiert!"
+    wait(1.5)
+    discordButton.Text = "📋 DISCORD"
+end)
+
+-- UI zeigen
 wait(1)
 openUI()
